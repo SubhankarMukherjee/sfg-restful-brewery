@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Created by jt on 3/13/21.
  */
 @Slf4j
-@Service
+//@Service
 @RequiredArgsConstructor
 public class ResetService {
 
@@ -23,7 +23,7 @@ public class ResetService {
     @Scheduled(fixedRate = 15000)
     @Transactional
     public void checkBeerCount(){
-        if (beerRepository.count() > 100){
+        if (beerRepository.count().block() > 100){
             resetBeers();
         }
     }
@@ -33,8 +33,8 @@ public class ResetService {
     @Transactional
     public void resetBeers(){
         log.info("Resetting Beer Data");
-        beerRepository.deleteAllInBatch();
-        beerRepository.flush();
+//        beerRepository.deleteAllInBatch();
+//        beerRepository.flush();
         beerLoader.run();
     }
 

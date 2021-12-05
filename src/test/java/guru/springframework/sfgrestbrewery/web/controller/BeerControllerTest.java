@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(BeerController.class)
 public class BeerControllerTest {
-
+/*
     @MockBean
     BeerService beerService;
 
@@ -87,5 +87,5 @@ public class BeerControllerTest {
 
         then(beerService).should().updateBeer(any(), any());
 
-    }
+    }*/
 }
