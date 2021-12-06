@@ -115,6 +115,13 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
+    public Mono<BeerDto> saveNewBeerMono(Mono<BeerDto> beerDto) {
+        return beerDto.map(beerMapper::beerDtoToBeer)
+                .flatMap(beerRepository::save)
+                .map(beerMapper::beerToBeerDto);
+    }
+
+    @Override
     public Mono<BeerDto> updateBeer(Integer beerId, BeerDto beerDto) {
 //        Beer beer = beerRepository.findById(beerId).orElseThrow(NotFoundException::new);
 //
@@ -151,5 +158,17 @@ public class BeerServiceImpl implements BeerService {
     @Override
     public void deleteBeerById(Integer beerId) {
         beerRepository.deleteById(beerId).subscribe();
+    }
+
+    @Override
+    public Mono<Void> reactiveDeleteById(Integer beerId) {
+       // return beerRepository.deleteById(beerId);
+
+        return beerRepository.findById(beerId)
+                .switchIfEmpty(Mono.error(new NotFoundException()))
+                .map(beer->{
+                    return beer.getId();
+                }).flatMap(beerRepository::deleteById);
+
     }
 }
